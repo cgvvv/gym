@@ -37,22 +37,22 @@ class MountainCarEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def step(self, real_position, action):
+    def step(self, action):
         assert self.action_space.contains(action), "%r (%s) invalid" % (action, type(action))
 
         position, velocity = self.state
-        velocity += (action-1)*0.001
+        velocity += (action-1)*0.001 #+ math.cos(3*position)*(-0.0025)
         velocity = np.clip(velocity, -self.max_speed, self.max_speed)
-        real_pos += real_position + velocity
-        position += velocity + real_pos*0.001* np.random.randn()                   #the grid cell calculated location
+        position += velocity
         position = np.clip(position, self.min_position, self.max_position)
-        
-        if (real_pos >= 3 and real_pos <= 4): # the place where the rodent could see the goal clearly
-        position = real_pos
-        if (position==self.min_position and velocity<0): velocity = 0
+        if (velocity<0): velocity = 0
 
-        done = bool(position >= self.goal_position)
+        #done = bool(position >= self.goal_position -0.05 and position <= self.goal_position+0.05 and velocity == 0)
+        done = bool(position >= 0.45 and position <= 0.55 and velocity == 0)
         reward = -1.0
+
+        self.state = (position, velocity)
+        return np.array(self.state), reward, done, {}
 
         self.state = (position, velocity)
         return np.array(self.state), reward, done, real_pos, {}
