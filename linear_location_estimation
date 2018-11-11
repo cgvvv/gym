@@ -1,0 +1,16 @@
+Linear Location Estimation
+
+A linear 1-D track where the agent can decide when to accelerate and decelerate. The goal is to reach and stop at the 
+goal’s location with minimal time. The agent’s observation on its own location has a noise, and this noise will increase
+proportional to the distance of agent from the starting point. When the agent is close to the goal, this noise will be 
+reset and kept as 0, which mimic the situation when the agent can actual see the goal clearly.
+
+Action Space
+The agent only has three action state: do nothing, accelerate or decelerate at a fixed acceleration.
+
+End condition
+First, the agent needs to stop at the reward zone, which is 1 unit away from the starting point and has a length of 0.1 unit.
+After the agent successfully stops at the reward zone, it is then required to reach the end of the track.
+
+Installation
+User only needs to install the modified version of gym from GitHub. 
